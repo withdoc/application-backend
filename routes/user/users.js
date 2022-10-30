@@ -3,31 +3,72 @@ const path = require('path');
 const sha256 = require('sha256');
 const FabricConfig = require("../../bin/FabricConfig")
 const router = express.Router();
+const jwt = require('../../utils/jwt-util');
+const redisClient = require('../../utils/redis');
+const authJwt = require('../../midlewares/authJwt');
+
 const fabric = new FabricConfig();
+fabric.setConfig();
 
 router.get('/', async function(req, res, next) {
   
-  await fabric.setConfig();
+  
   let result = await fabric.contract.evaluateTransaction('GetAllAssets');
   await console.log(fabric.prettyJSONString(result));
   res.send(200);
 });
 
 router.post('/signup', async function(req, res, next){
-    const {userAuthication} = req.body;
-    await fabric.registerNewUser(sha256(userAuthication));
-    res.send(200);
+  const { email, password, name, address, sex, nation, birthday } = req.body;
+  await fabric.registerNewUser(sha256(email));
+  /* 
+    save data in couchdb
+  */
+  res.send(200);
 })
 
-router.post('/add', async function(req, res, next){
-    await fabric.setConfig();
-    // await fabric.contract.submitTransaction('CreateDocument', '11', '11', '11', '11', '11', '11', '11', '11');
-    await fabric.contract.submitTransaction('CreateAsset', 'asset13', 'yellow', '5', 'Tom', '1300');
-    res.send(200);
+router.post('/signin', async function(req, res, next){
+  const { email, password } = req.body;
+  const emailHashedValue = sha256("abcs");
+  const user = {
+    id:"ab",
+    role:"aa"
+  }
+  if (true) { // id, pw가 맞다면..
+    // access token과 refresh token을 발급합니다.
+    const accessToken = jwt.sign(user);
+    const refreshToken = jwt.refresh();
+
+    // 발급한 refresh token을 redis에 key를 user의 id로 하여 저장합니다.
+    redisClient.set(user.id, refreshToken);
+
+    res.status(200).send({ // client에게 토큰 모두를 반환합니다.
+      ok: true,
+      data: {
+        accessToken,
+        refreshToken,
+      },
+    });
+  } else {
+    res.status(401).send({
+      ok: false,
+      message: 'password is incorrect',
+    });
+  }
+  res.send(200);
 })
 
-router.get('init', async function(req, res, next){
+router.put('/modify', authJwt, function(req, res, next){
+  const { email, password } = req.body;
+  if(true){
+    
+  }
+  res.send(200);
+})
 
+router.delete('/delete', authJwt, function(req,res,next){
+  const { email, password } = req.body;
+  res.send(200);
 })
 
 module.exports = router;
