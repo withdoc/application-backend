@@ -69,7 +69,7 @@ class FabricConfig{
 
             const org1UserId = userName;
 
-            await registerAndEnrollUser(caClient, wallet, mspOrg1, org1UserId, 'org1.department1');
+            console.log(await registerAndEnrollUser(caClient, wallet, mspOrg1, org1UserId, 'org1.department1'));
         }
     }
     
