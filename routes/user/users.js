@@ -23,11 +23,6 @@ router.post('/signup', async function(req, res, next){
   await fabric.registerNewUser(sha256(email)).then(async ()=>{
     await fabric.contract.submitTransaction('CreateUser', "", sha256(email), sha256(password), name, address, sex, nation, birthday);
   }).catch(err => { throw new Error(`The asset ${email} already exist`); });
-  // 
-  
-  /* 
-    save data in couchdb
-  */
   res.send(200);
 })
 
@@ -36,7 +31,6 @@ router.post('/signin', async function(req, res, next){
   const emailHashedValue = sha256(email);
   const passwordHashedValue = sha256(password)
   const exist = fabric.contract.evaluateTransaction("UserExists", emailHashedValue, passwordHashedValue)
-  console.log(exist)
   if (exist) { // id, pw가 맞다면..
     const user = {
       id:emailHashedValue,
@@ -63,16 +57,16 @@ router.post('/signin', async function(req, res, next){
   }
 })
 
-router.put('/modify', authJwt, function(req, res, next){
+router.put('/modify', authJwt, async function(req, res, next){
   const { email, password } = req.body;
-  if(true){
-    
-  }
-  res.send(200);
+  const emailHashedValue = sha256(email);
+  const passwordHashedValue = sha256(password)
+  await fabric.contract.submitTransaction("ModifyPassword", emailHashedValue, passwordHashedValue)
+    .then(()=>{res.send(200)})
+    .catch(err => {res.send(401)})
 })
 
 router.post('/delete', authJwt, async (req,res,next) => {
-  console.log(1111)
   const { email, password } = req.body;
   const emailHashedValue = sha256(email);
   const passwordHashedValue = sha256(password)
