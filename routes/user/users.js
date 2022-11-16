@@ -10,14 +10,6 @@ const authJwt = require('../../midlewares/authJwt');
 const fabric = new FabricConfig();
 fabric.setConfig();
 
-router.get('/', async function(req, res, next) {
-  
-  
-  let result = await fabric.contract.evaluateTransaction('GetAllAssets');
-  await console.log(fabric.prettyJSONString(result));
-  res.send(200);
-});
-
 router.post('/signup', async function(req, res, next){
   const { email, password, name, address, sex, nation, birthday } = req.body;
   await fabric.registerNewUser(email).then(async ()=>{
@@ -53,10 +45,10 @@ router.post('/signin', async function(req, res, next){
 })
 
 router.put('/modify', authJwt, async function(req, res, next){
-  const { email, password } = req.body;
-  const emailHashedValue = email;
-  const passwordHashedValue = sha256(password)
-  await fabric.contract.submitTransaction("ModifyPassword", emailHashedValue, passwordHashedValue)
+  const { email, password, newPassword} = req.body;
+  const passwordHashedValue = sha256(password);
+  const newPasswordHashedValue = sha256(newPassword);
+  await fabric.contract.submitTransaction("ModifyPassword", email, passwordHashedValue, newPasswordHashedValue)
     .then(()=>{res.send(200)})
     .catch(err => {res.send(401)})
 })
