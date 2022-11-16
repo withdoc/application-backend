@@ -15,10 +15,14 @@
     "dependencies": {
         "cookie-parser": "~1.4.4",
         "express": "~4.16.1",
+        "express-jwt": "^7.7.7",
         "fabric-ca-client": "^2.2.4",
         "fabric-network": "^2.2.4",
         "http-errors": "~1.6.3",
+        "json-stringify-deterministic": "^1.0.7",
+        "jsonwebtoken": "^8.5.1",
         "pug": "^3.0.2",
+        "redis": "^4.3.1",
         "sha256": "^0.2.0"
     }
 }
