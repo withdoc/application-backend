@@ -20,29 +20,24 @@ router.get('/', async function(req, res, next) {
 
 router.post('/signup', async function(req, res, next){
   const { email, password, name, address, sex, nation, birthday } = req.body;
-  await fabric.registerNewUser(sha256(email)).then(async ()=>{
-    await fabric.contract.submitTransaction('CreateUser', "", sha256(email), sha256(password), name, address, sex, nation, birthday);
+  await fabric.registerNewUser(email).then(async ()=>{
+    await fabric.contract.submitTransaction('CreateUser', "", email, sha256(password), name, address, sex, nation, birthday);
   }).catch(err => { throw new Error(`The asset ${email} already exist`); });
   res.send(200);
 })
 
 router.post('/signin', async function(req, res, next){
   const { email, password } = req.body;
-  const emailHashedValue = sha256(email);
   const passwordHashedValue = sha256(password)
-  const exist = fabric.contract.evaluateTransaction("UserExists", emailHashedValue, passwordHashedValue)
+  const exist = fabric.contract.evaluateTransaction("UserExists", email, passwordHashedValue)
   if (exist) { // id, pw가 맞다면..
     const user = {
-      id:emailHashedValue,
+      id:email,
       role:"user"
     }
-    // access token과 refresh token을 발급합니다.
+    // access token을 발급합니다.
+    
     const accessToken = await jwt.sign(user);
-    // const refreshToken = await jwt.refresh();
-
-    // 발급한 refresh token을 redis에 key를 user의 id로 하여 저장합니다.
-    // await redisClient.set(user.id, refreshToken);
-
     res.status(200).send({ // client에게 토큰 모두를 반환합니다.
       ok: true,
       data: {
@@ -59,7 +54,7 @@ router.post('/signin', async function(req, res, next){
 
 router.put('/modify', authJwt, async function(req, res, next){
   const { email, password } = req.body;
-  const emailHashedValue = sha256(email);
+  const emailHashedValue = email;
   const passwordHashedValue = sha256(password)
   await fabric.contract.submitTransaction("ModifyPassword", emailHashedValue, passwordHashedValue)
     .then(()=>{res.send(200)})
@@ -68,7 +63,7 @@ router.put('/modify', authJwt, async function(req, res, next){
 
 router.post('/delete', authJwt, async (req,res,next) => {
   const { email, password } = req.body;
-  const emailHashedValue = sha256(email);
+  const emailHashedValue = email;
   const passwordHashedValue = sha256(password)
   await fabric.contract.submitTransaction("DeleteUser", emailHashedValue, passwordHashedValue)
     .then(()=>{res.send(200)})
