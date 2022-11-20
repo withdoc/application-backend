@@ -11,6 +11,10 @@ const fabric = new FabricConfig();
 
 fabric.setConfig();
 
+function prettyJSONString(inputString) {
+	return JSON.stringify(JSON.parse(inputString), null, 2);
+}
+
 const setDocDetailAttr = (docType) => {
     if (docType == "VISA") return "visaType";
     else if (docType == "PASSPORT") return "passportSerialNumber";
@@ -33,9 +37,9 @@ router.post('/create', authJwt, async (req, res, next) => {
     }
 )
 
-router.post('/getAllDocument', authJwt, async (req, res, next) => {
+router.get('/all', authJwt, async (req, res, next) => {
     // 추가인증 ?
-    const {email} = req.body;
+    const email = req.query.email;
     let results = [];
     await fabric.contract.evaluateTransaction("GetAllDocuments", email).then(async (documents) => {
         const documentList = JSON.parse(documents);
@@ -53,6 +57,23 @@ router.post('/getAllDocument', authJwt, async (req, res, next) => {
     setTimeout(()=>res.send(results), 100);
 })
 
+router.get('/', authJwt, async (req, res, next) => {
+    const docId = req.query.docId;
+    const document =  await fabric.contract.evaluateTransaction("GetSpecificDocument", docId);
+    // const docDetail = JSON.parse(await fabric.contract.evaluateTransaction("GetSpecificDocument", docId));
+    const tmp = document.toJSON();
+    console.log(document.toString('ascii'));
+    res.send(document);
+})
 
+router.post('/delete', authJwt, async (req, res, next) => {
+    const { docId, email, password } = req.body;
+
+    const passwordHashedValue = sha256(password)
+    await fabric.contract.submitTransaction('DeleteDocument', email, passwordHashedValue, docId)
+        .then(()=>{res.send(200)})
+        .catch(err => { res.send(err) });
+    }
+)
 
 module.exports = router;
