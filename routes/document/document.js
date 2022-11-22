@@ -63,12 +63,12 @@ router.get('/all', authJwt, async (req, res, next) => {
 
 router.get('/', authJwt, async (req, res, next) => {
     const docId = req.query.docId;
-    const document =  await fabric.contract.evaluateTransaction("GetSpecificDocument", docId);
-    const docDetail = await fabric.contract.evaluateTransaction("GetDocumentDetail", docId);
-    // const tmp = document.toJSON();
-    console.log(JSON.parse(docDetail));
-    console.log(`*** Result: ${prettyJSONString(document.toString())}`);
-
+    const document =  JSON.parse(await fabric.contract.evaluateTransaction("GetSpecificDocument", docId));
+    const docDetail = JSON.parse(await fabric.contract.evaluateTransaction("GetDocumentDetail", docId))[0];
+    for(const key in docDetail.Record){
+        if(key != "id" && key != "docId")
+            document[key] = docDetail.Record[key];
+    }
     res.send(document);
 })
 
