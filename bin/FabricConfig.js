@@ -35,7 +35,7 @@ class FabricConfig{
             
                 // in a real application this would be done only when a new user was required to be added
                 // and would be part of an administrative flow
-                const org1UserId = 'appUser';
+                const org1UserId = 'admin';
                 await registerAndEnrollUser(caClient, wallet, mspOrg1, org1UserId, 'org1.department1');
             
                 // Create a new gateway instance for interacting with the fabric network.

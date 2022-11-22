@@ -5,6 +5,7 @@ const FabricConfig = require("../../bin/FabricConfig")
 const RandomeHash = require("random-hash")
 const authJwt = require('../../midlewares/authJwt');
 const { type } = require('os');
+const { json } = require('../../utils/redis');
 
 const router = express.Router();
 const fabric = new FabricConfig();
@@ -25,13 +26,16 @@ router.post('/create', authJwt, async (req, res, next) => {
     const { email, password,
         docName, docSerialNum, docPublishedDate, docExpiryDate, docPublishOrg,
         docType, dataType, docDetailSerialNum} = req.body;
+
     const documentId = RandomeHash.generateHash();
     const docDetailId = RandomeHash.generateHash();
-    await fabric.contract.submitTransaction('CreateDocument', documentId, docDetailId, email, password,
+    console.log(documentId, docDetailId)
+    await fabric.contract.submitTransaction('CreateDocument', documentId, docDetailId, email, sha256(password),
         docName, docSerialNum, docPublishedDate, docExpiryDate, docPublishOrg,docType, dataType, docDetailSerialNum)
         .then((documentInfo) => {
+            console.log(email)
             console.log(documentInfo);
-            res.send(200)
+            res.send("ok")
         })
         .catch(err => { res.send(err) });
     }
@@ -60,9 +64,11 @@ router.get('/all', authJwt, async (req, res, next) => {
 router.get('/', authJwt, async (req, res, next) => {
     const docId = req.query.docId;
     const document =  await fabric.contract.evaluateTransaction("GetSpecificDocument", docId);
-    // const docDetail = JSON.parse(await fabric.contract.evaluateTransaction("GetSpecificDocument", docId));
-    const tmp = document.toJSON();
-    console.log(document.toString('ascii'));
+    const docDetail = await fabric.contract.evaluateTransaction("GetDocumentDetail", docId);
+    // const tmp = document.toJSON();
+    console.log(JSON.parse(docDetail));
+    console.log(`*** Result: ${prettyJSONString(document.toString())}`);
+
     res.send(document);
 })
 
