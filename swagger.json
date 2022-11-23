@@ -1,0 +1,329 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Swagger for withDoc",
+    "description": "Open API docs with Swagger",
+    "license": {
+      "name": "MIT",
+      "url": "http://localhost:3000"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Task Swagger",
+      "description": "API for task"
+    }
+  ],
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["Main"],
+        "summary": "Main Page Get",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#definitions/item"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Main"],
+        "summary": "Login Data Post",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Register",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Register Success"
+          },
+          "404": {
+            "description": "Failed. Bad Request"
+          }
+        }
+      }
+    },
+    "/user/signup" : {
+      "post": {
+        "tags": ["User"],
+        "summary": "SignUp new user",
+        "parameters": [
+          {
+            "in":"body",
+            "name": "body",
+            "description": "Register",
+            "schema":{
+              "$ref":"#/definitions/new user"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Register Success"
+          },
+          "403": {
+            "description": "Failed. Bad Request"
+          }
+        }
+      }
+    },
+    "/user/signin" : {
+      "post": {
+        "tags": ["User"],
+        "summary": "Login",
+        "parameters": [
+          {
+            "in":"body",
+            "name": "body",
+            "description": "Register",
+            "schema":{
+              "$ref":"#/definitions/user login"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "type":"jwt",
+            "token":"asdbaskdhbaskdjadkjasdnkasd"
+          },
+          "501": {
+            "description": "does not exist email or invalid password"
+          }
+        }
+      }
+    },
+    "/user/modify" : {
+      "post": {
+        "tags": ["User"],
+        "summary": "Modify user password",
+        "parameters": [
+          {
+            "in":"body",
+            "name": "body",
+            "description": "update",
+            "schema":{
+              "$ref":"#/definitions/user modify"
+            }
+          }
+        ],
+        "responses": {
+          "201": "ok",
+          "501": {
+            "description": "does not exist email or invalid password"
+          }
+        }
+      }
+    },
+    "/user/delete" : {
+      "post": {
+        "tags": ["User"],
+        "summary": "delete user",
+        "parameters": [
+          {
+            "in":"body",
+            "name": "body",
+            "description": "delete",
+            "schema":{
+              "$ref":"#/definitions/user delete"
+            }
+          }
+        ],
+        "responses": {
+          "201": "ok",
+          "501": {
+            "description": "does not exist email or invalid password"
+          }
+        }
+      }
+    },
+    "/document/" : {
+      "get": {
+        "tags": ["Document"],
+        "summary": "get specific document info",
+        "parameters": [
+          {
+            "in":"body",
+            "name": "body",
+            "description": "delete",
+            "schema":{
+              "$ref":"#/definitions/user delete"
+            }
+          }
+        ],
+        "responses": {
+          "201": "ok",
+          "501": {
+            "description": "does not exist email or invalid password"
+          }
+        }
+      }
+    },
+    "/document/all" : {
+      "get": {
+        "tags": ["Document"],
+        "summary": "delete user",
+        "parameters": [
+          {
+            "in":"body",
+            "name": "body",
+            "description": "delete",
+            "schema":{
+              "$ref":"#/definitions/user delete"
+            }
+          }
+        ],
+        "responses": {
+          "201": "ok",
+          "501": {
+            "description": "does not exist email or invalid password"
+          }
+        }
+      }
+    },
+    "/document/create" : {
+      "post": {
+        "tags": ["Document"],
+        "summary": "post document",
+        "parameters": [
+          {
+            "in":"body",
+            "name": "body",
+            "description": "delete",
+            "schema":{
+              "$ref":"#/definitions/post document"
+            }
+          }
+        ],
+        "responses": {
+          "201": "ok",
+          "501": {
+            "description": "does not exist email or invalid password"
+          }
+        }
+      }
+    },
+    "/document/delete" : {
+      "post": {
+        "tags": ["Document"],
+        "summary": "delete document",
+        "parameters": [
+          {
+            "in":"body",
+            "name": "body",
+            "description": "delete document",
+            "schema":{
+              "$ref":"#/definitions/document delete"
+            }
+          }
+        ],
+        "responses": {
+          "201": "ok",
+          "501": {
+            "description": "does not exist email or invalid password"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "delete document":{
+      "properties":{
+        "docId":{"type":"string"},
+        "email":{"type":"string"},
+        "password":{"type":"string"}
+      }
+    },
+    "post document":{
+      "properties":{
+        "email":{"type":"string"},
+        "password":{"type":"string"},
+        "docName":{"type":"string"},
+        "docSerialNum":{"type":"string"},
+        "docPublishedDate":{"type":"date"},
+        "docExpiryDate":{"type":"date"},
+        "docPublishOrg":{"type":"string"},
+        "docType":{"type":"VISA or PASSPORT or DRIVERLICENSE"},
+        "docDetailSerialNum":{"type":"string"}
+      }
+    },
+    "get all document":{
+      "properties":{
+        "email":{"type":"string"}
+      }
+    },
+    "get specific document":{
+      "properties":{
+        "email":{"type":"string"}
+      }
+    },
+    "user delete":{
+      "properties":{
+        "email":{"type":"string"},
+        "password":{"type":"string"}
+      }
+    },
+    "user modify":{
+      "properties":{
+        "email":{"type":"string"},
+        "password":{"type":"string"},
+        "newPassword":{"type":"string"}
+      }
+    },
+    "user login":{
+      "properties":{
+        "email":{"type":"string"},
+        "password":{"type":"string"}
+      }
+    },
+    "new user": {
+      "properties":{
+        "email": {"type":"string"},
+        "password": {"type": "string"},
+        "name": {"type":"string"},
+        "birthday": {"type":"date"},
+        "address": {"type":"string"},
+        "sex": {"type":"string"},
+        "nation": {"type":"string"}
+      }
+    },
+    "user": {
+      "properties": {
+        "userid": {
+          "type": "integer"
+        },
+        "email": {
+          "type": "string"
+        },
+        "passwd": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "callnumber": {
+          "type": "string"
+        },
+        "refresh": {
+          "type": "string"
+        },
+        "salt": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
