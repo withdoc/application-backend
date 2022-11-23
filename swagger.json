@@ -158,14 +158,19 @@
           {
             "in":"body",
             "name": "body",
-            "description": "delete",
+            "description": "get specific document info",
             "schema":{
-              "$ref":"#/definitions/user delete"
+              "$ref":"#/definitions/get specific doc req"
             }
           }
         ],
         "responses": {
-          "201": "ok",
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#definitions/get document"
+            }
+          },
           "501": {
             "description": "does not exist email or invalid password"
           }
@@ -175,19 +180,24 @@
     "/document/all" : {
       "get": {
         "tags": ["Document"],
-        "summary": "delete user",
+        "summary": "get documents",
         "parameters": [
           {
             "in":"body",
             "name": "body",
-            "description": "delete",
+            "description": "get documents",
             "schema":{
-              "$ref":"#/definitions/user delete"
+              "$ref":"#/definitions/get all doc req"
             }
           }
         ],
         "responses": {
-          "201": "ok",
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#definitions/get documents"
+            }
+          },
           "501": {
             "description": "does not exist email or invalid password"
           }
@@ -240,6 +250,46 @@
     }
   },
   "definitions": {
+    "get specific doc req":{
+      "properties":{
+          "email": {"type":"string"},
+          "password": {"type":"string"},
+          "docId": {"type":"string"}
+        }
+    },
+    "get all doc req":{
+      "properties":{
+          "email": {"type":"string"}
+        }
+    },
+    "get documents":{
+      "properties":{
+          "dataType": {"type":"string"},
+          "docExpiryDate": {"type":"string"},
+          "docName": {"type":"string"},
+          "docPublishedDate": {"type":"date"},
+          "docPublishedOrg": {"type":"string"},
+          "docSerialNum": {"type":"string"},
+          "docType": {"type":"string"},
+          "id": {"type":"string"},
+          "userId": {"type":"string"},
+          "visaType": {"type":"string"}
+        }
+    },
+    "get document":{
+      "properties":{
+          "dataType": {"type":"string"},
+          "docExpiryDate": {"type":"string"},
+          "docName": {"type":"string"},
+          "docPublishedDate": {"type":"date"},
+          "docPublishedOrg": {"type":"string"},
+          "docSerialNum": {"type":"string"},
+          "docType": {"type":"string"},
+          "id": {"type":"string"},
+          "userId": {"type":"string"},
+          "visaType": {"type":"string"}
+        }
+    },
     "delete document":{
       "properties":{
         "docId":{"type":"string"},
