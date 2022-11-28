@@ -13,17 +13,22 @@
     "author": "Hyperledger",
     "license": "Apache-2.0",
     "dependencies": {
+        "@pdftron/pdfnet-node": "^9.4.0",
         "cookie-parser": "~1.4.4",
         "express": "~4.16.1",
+        "express-fileupload": "^1.4.0",
         "express-jwt": "^7.7.7",
         "fabric-ca-client": "^2.2.4",
         "fabric-network": "^2.2.4",
         "http-errors": "~1.6.3",
+        "jimp": "^0.16.2",
         "json-stringify-deterministic": "^1.0.7",
         "jsonwebtoken": "^8.5.1",
+        "minio": "^7.0.32",
         "pug": "^3.0.2",
         "random-hash": "^4.0.1",
         "redis": "^4.3.1",
-        "sha256": "^0.2.0"
+        "sha256": "^0.2.0",
+        "swagger-ui-express": "^4.6.0"
     }
 }
