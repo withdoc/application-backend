@@ -29,12 +29,14 @@ var indexRouter = require("./routes/index");
 const userRouter = require("./routes/user/users");
 const docsRouter = require("./routes/docs");
 const documentRouter = require("./routes/document/document")
+const travelRouter = require("./routes/travel/travel");
 
 // routers list
 app.use("/", indexRouter);
 app.use("/user", userRouter);
 app.use("/docs", docsRouter);
 app.use('/document', documentRouter);
+app.use("/travel", travelRouter);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

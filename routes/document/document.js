@@ -1,20 +1,13 @@
 const express = require('express');
-const path = require('path');
 const sha256 = require('sha256');
 const FabricConfig = require("../../bin/FabricConfig")
 const RandomeHash = require("random-hash")
 const authJwt = require('../../midlewares/authJwt');
-const { type } = require('os');
-const { json } = require('../../utils/redis');
 
 const router = express.Router();
 const fabric = new FabricConfig();
 
 fabric.setConfig();
-
-function prettyJSONString(inputString) {
-	return JSON.stringify(JSON.parse(inputString), null, 2);
-}
 
 const setDocDetailAttr = (docType) => {
     if (docType == "VISA") return "visaType";
