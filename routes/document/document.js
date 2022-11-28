@@ -22,6 +22,7 @@ const setDocDetailAttr = (docType) => {
     else return "driverLicenseSerialNumber";
 }
 
+
 router.post('/create', authJwt, async (req, res, next) => {
     const { email, password,
         docName, docSerialNum, docPublishedDate, docExpiryDate, docPublishOrg,
@@ -31,7 +32,9 @@ router.post('/create', authJwt, async (req, res, next) => {
     const docDetailId = RandomeHash.generateHash();
     console.log(documentId, docDetailId)
     await fabric.contract.submitTransaction('CreateDocument', documentId, docDetailId, email, sha256(password),
+
         docName, docSerialNum, docPublishedDate, docExpiryDate, docPublishOrg,docType, dataType, docDetailSerialNum)
+
         .then((documentInfo) => {
             console.log(email)
             console.log(documentInfo);

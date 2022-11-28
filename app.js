@@ -16,7 +16,6 @@ app.set("view engine", "pug");
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   fileUpload({
@@ -37,7 +36,6 @@ app.use("/docs", docsRouter);
 app.use('/document', documentRouter);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
