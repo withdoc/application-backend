@@ -26,7 +26,6 @@ router.post('/', authJwt, async (req, res, next) => {
     await fabric.contract.submitTransaction('CreateDocument', documentId, docDetailId, email, sha256(password),
         docName, docSerialNum, docPublishedDate, docExpiryDate, docPublishOrg,docType, "document", docDetailSerialNum)
         .then((documentInfo) => {
-            console.log(email)
             console.log(documentInfo);
             res.send("ok")
         })
