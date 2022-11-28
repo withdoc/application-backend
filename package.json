@@ -22,6 +22,7 @@
         "json-stringify-deterministic": "^1.0.7",
         "jsonwebtoken": "^8.5.1",
         "pug": "^3.0.2",
+        "random-hash": "^4.0.1",
         "redis": "^4.3.1",
         "sha256": "^0.2.0"
     }
