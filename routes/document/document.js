@@ -9,22 +9,31 @@ const fabric = new FabricConfig();
 
 fabric.setConfig();
 
+
+function prettyJSONString(inputString) {
+	return JSON.stringify(JSON.parse(inputString), null, 2);
+}
+
 const setDocDetailAttr = (docType) => {
     if (docType == "VISA") return "visaType";
     else if (docType == "PASSPORT") return "passportSerialNumber";
     else return "driverLicenseSerialNumber";
 }
 
-router.post('/', authJwt, async (req, res, next) => {
+
+router.post('/create', authJwt, async (req, res, next) => {
     const { email, password,
         docName, docSerialNum, docPublishedDate, docExpiryDate, docPublishOrg,
-        docType, docDetailSerialNum} = req.body;
+        docType, dataType, docDetailSerialNum} = req.body;
 
     const documentId = RandomeHash.generateHash();
     const docDetailId = RandomeHash.generateHash();
     console.log(documentId, docDetailId)
     await fabric.contract.submitTransaction('CreateDocument', documentId, docDetailId, email, sha256(password),
-        docName, docSerialNum, docPublishedDate, docExpiryDate, docPublishOrg,docType, "document", docDetailSerialNum)
+
+
+        docName, docSerialNum, docPublishedDate, docExpiryDate, docPublishOrg,docType, dataType, docDetailSerialNum)
+
         .then((documentInfo) => {
             console.log(email)
             console.log(documentInfo);
