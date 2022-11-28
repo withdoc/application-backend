@@ -1,16 +1,14 @@
 const express = require('express');
-const path = require('path');
 const sha256 = require('sha256');
 const FabricConfig = require("../../bin/FabricConfig")
 const RandomeHash = require("random-hash")
 const authJwt = require('../../midlewares/authJwt');
-const { type } = require('os');
-const { json } = require('../../utils/redis');
 
 const router = express.Router();
 const fabric = new FabricConfig();
 
 fabric.setConfig();
+
 
 function prettyJSONString(inputString) {
 	return JSON.stringify(JSON.parse(inputString), null, 2);
@@ -32,6 +30,7 @@ router.post('/create', authJwt, async (req, res, next) => {
     const docDetailId = RandomeHash.generateHash();
     console.log(documentId, docDetailId)
     await fabric.contract.submitTransaction('CreateDocument', documentId, docDetailId, email, sha256(password),
+
 
         docName, docSerialNum, docPublishedDate, docExpiryDate, docPublishOrg,docType, dataType, docDetailSerialNum)
 
