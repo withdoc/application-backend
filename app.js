@@ -16,8 +16,7 @@ app.set("view engine", "pug");
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   fileUpload({
     useTempFiles: true,
@@ -25,14 +24,14 @@ app.use(
   })
 );
 
-var indexRouter = require("./routes/index");
-const userRouter = require("./routes/user/users");
+var indexRouter = require('./routes/index');
+const userRouter = require('./routes/user/users')
 const docsRouter = require("./routes/docs");
 const documentRouter = require("./routes/document/document")
 
 // routers list
-app.use("/", indexRouter);
-app.use("/user", userRouter);
+app.use('/', indexRouter);
+app.use('/user', userRouter);
 app.use("/docs", docsRouter);
 app.use('/document', documentRouter);
 
