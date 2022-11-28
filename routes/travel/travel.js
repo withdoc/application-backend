@@ -11,16 +11,14 @@ const fabric = new FabricConfig();
 fabric.setConfig();
 
 router.post('/', authJwt, async (req, res, next) => {
-    const { email, travelTitle, destinationCountry, leaveDate, arriveDate } = req.body;
+    const { email, travelTitle, guestCnt ,destinationCountry, leaveDate, arriveDate } = req.body;
+    const travelId = RandomeHash.generateHash();
 
-    await fabric.contract.evaluateTransaction("GetAllDocuments", email).then(async (documents) => {
-        const documentList = JSON.parse(documents);
-        await documentList.map(async (document) => {
-            console.log(document);
+    await fabric.contract.submitTransaction('CreateTravel',  travelId, email, travelTitle, guestCnt, destinationCountry, leaveDate, arriveDate)
+        .then(() => {
+            res.send("ok")
         })
-    })
-    // 근본적 해결 방법 찾을 필요가 있음 (조회할 데이터가 많아지면 타임아웃 시간도 길어져야함)
-    setTimeout(()=>res.send(results), 100);
+        .catch(err => { res.send(err) });
 })
 
 router.get('/get-document-status', authJwt, async (req, res, next) => {
