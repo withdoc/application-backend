@@ -22,7 +22,6 @@ router.post('/', authJwt, async (req, res, next) => {
 
     const documentId = RandomeHash.generateHash();
     const docDetailId = RandomeHash.generateHash();
-    console.log(documentId, docDetailId)
     await fabric.contract.submitTransaction('CreateDocument', documentId, docDetailId, email, sha256(password),
         docName, docSerialNum, docPublishedDate, docExpiryDate, docPublishOrg,docType, "document", docDetailSerialNum)
         .then((documentInfo) => {

@@ -25,7 +25,7 @@ app.use(
   })
 );
 
-var indexRouter = require("./routes/index");
+const indexRouter = require("./routes/index");
 const userRouter = require("./routes/user/users");
 const docsRouter = require("./routes/docs");
 const documentRouter = require("./routes/document/document")
