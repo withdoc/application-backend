@@ -7,7 +7,8 @@ const fileUpload = require("express-fileupload");
 var path = require("path");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
-const FabricConfig = require("./bin/FabricConfig")
+const FabricConfig = require("./bin/FabricConfig");
+const cors = require("cors");
 
 const fabric = new FabricConfig();
 fabric.setConfig();
@@ -20,6 +21,7 @@ app.set("view engine", "pug");
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(cors());
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
