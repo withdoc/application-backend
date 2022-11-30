@@ -13,12 +13,39 @@ fabric.setConfig();
 router.post('/', authJwt, async (req, res, next) => {
     const { email, travelTitle, guestCnt ,destinationCountry, leaveDate, arriveDate } = req.body;
     const travelId = RandomeHash.generateHash();
-
     await fabric.contract.submitTransaction('CreateTravel',  travelId, email, travelTitle, guestCnt, destinationCountry, leaveDate, arriveDate)
         .then(() => {
             res.send("ok")
         })
         .catch(err => { res.send(err) });
+})
+
+router.get('/all', authJwt, async (req, res, next) => {
+    const email = req.query.email;
+    await fabric.contract.evaluateTransaction("GetAllTravels", email).then(async (travels) => {
+        const travelList = JSON.parse(travels);
+        res.send(travelList);
+    })
+    .catch(err => res.send(err))
+})
+
+router.get('/', authJwt, async (req, res, next) => {
+    const travelId = req.query.travelId;
+    
+    await fabric.contract.evaluateTransaction("GetSpecificTravel", travelId).then(async (travel) => {
+        const travelJson = JSON.parse(travel);
+        res.send(travelJson);
+    })
+    .catch(err => res.send(err))
+
+})
+
+router.delete('/', authJwt, async (req, res, next) => {
+    const travelId = req.query.travelId;
+
+    await fabric.contract.submitTransaction("DeleteTravel", travelId)
+    .then(()=>{res.send(200)})
+    .catch(err => { res.send(err) });
 })
 
 router.get('/get-document-status', authJwt, async (req, res, next) => {
