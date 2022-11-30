@@ -7,6 +7,10 @@ const fileUpload = require("express-fileupload");
 var path = require("path");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
+const FabricConfig = require("./bin/FabricConfig")
+
+const fabric = new FabricConfig();
+fabric.setConfig();
 
 var app = express();
 

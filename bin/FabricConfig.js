@@ -37,7 +37,7 @@ class FabricConfig{
                 // and would be part of an administrative flow
                 const org1UserId = 'admin';
                 await registerAndEnrollUser(caClient, wallet, mspOrg1, org1UserId, 'org1.department1');
-            
+
                 // Create a new gateway instance for interacting with the fabric network.
                 // In a real application this would be done as the backend server session is setup for
                 // a user that has been verified.
