@@ -16,13 +16,12 @@ const setDocDetailAttr = (docType) => {
 }
 
 router.post('/', authJwt, async (req, res, next) => {
-    const { email, password,
-        docName, docSerialNum, docPublishedDate, docExpiryDate, docPublishOrg,
+    const { docName, docSerialNum, docPublishedDate, docExpiryDate, docPublishOrg,
         docType, docDetailSerialNum} = req.body;
 
     const documentId = RandomeHash.generateHash();
     const docDetailId = RandomeHash.generateHash();
-    await fabric.contract.submitTransaction('CreateDocument', documentId, docDetailId, email, sha256(password),
+    await fabric.contract.submitTransaction('CreateDocument', documentId, docDetailId, req.id,
         docName, docSerialNum, docPublishedDate, docExpiryDate, docPublishOrg,docType, "document", docDetailSerialNum)
         .then((documentInfo) => {
             console.log(documentInfo);
@@ -34,9 +33,8 @@ router.post('/', authJwt, async (req, res, next) => {
 
 router.get('/all', authJwt, async (req, res, next) => {
     // 추가인증 ?
-    const email = req.query.email;
     let results = [];
-    await fabric.contract.evaluateTransaction("GetAllDocuments", email).then(async (documents) => {
+    await fabric.contract.evaluateTransaction("GetAllDocuments", req.id).then(async (documents) => {
         const documentList = JSON.parse(documents);
         await documentList.map(async (document) => {
             await fabric.contract.evaluateTransaction("GetDocumentDetail", document.Key)
@@ -63,11 +61,8 @@ router.get('/', authJwt, async (req, res, next) => {
     res.send(document);
 })
 
-router.post('/delete', authJwt, async (req, res, next) => {
-    const { docId, email, password } = req.body;
-
-    const passwordHashedValue = sha256(password)
-    await fabric.contract.submitTransaction('DeleteDocument', email, passwordHashedValue, docId)
+router.delete('/', authJwt, async (req, res, next) => {
+    await fabric.contract.submitTransaction('DeleteDocument', req.id, req.query.docId)
         .then(()=>{res.send(200)})
         .catch(err => { res.send(err) });
     }

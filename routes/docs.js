@@ -5,7 +5,7 @@ const Jimp = require("jimp");
 const fs = require("fs");
 
 const minioClient = new Minio.Client({
-  endPoint: "172.30.10.196",
+  endPoint: "localhost",
   port: 9000,
   useSSL: false,
 

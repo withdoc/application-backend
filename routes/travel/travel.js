@@ -11,9 +11,9 @@ const fabric = new FabricConfig();
 fabric.setConfig();
 
 router.post('/', authJwt, async (req, res, next) => {
-    const { email, travelTitle, guestCnt ,destinationCountry, leaveDate, arriveDate } = req.body;
+    const {travelTitle, guestCnt ,destinationCountry, leaveDate, arriveDate } = req.body;
     const travelId = RandomeHash.generateHash();
-    await fabric.contract.submitTransaction('CreateTravel',  travelId, email, travelTitle, guestCnt, destinationCountry, leaveDate, arriveDate)
+    await fabric.contract.submitTransaction('CreateTravel',  travelId, req.id, travelTitle, guestCnt, destinationCountry, leaveDate, arriveDate)
         .then(() => {
             res.send("ok")
         })
@@ -21,8 +21,7 @@ router.post('/', authJwt, async (req, res, next) => {
 })
 
 router.get('/all', authJwt, async (req, res, next) => {
-    const email = req.query.email;
-    await fabric.contract.evaluateTransaction("GetAllTravels", email).then(async (travels) => {
+    await fabric.contract.evaluateTransaction("GetAllTravels", req.id).then(async (travels) => {
         const travelList = JSON.parse(travels);
         res.send(travelList);
     })
@@ -50,11 +49,11 @@ router.delete('/', authJwt, async (req, res, next) => {
 
 router.get('/get-document-status', authJwt, async (req, res, next) => {
     // 추가인증 ?
-    const {email, country} = req.query;
+    const {country} = req.query;
     let results = {};
     for (const countryName of docList[country]) results[countryName] = false;
 
-    await fabric.contract.evaluateTransaction("GetAllDocuments", email).then(async (documents) => {
+    await fabric.contract.evaluateTransaction("GetAllDocuments", req.id).then(async (documents) => {
         const documentList = JSON.parse(documents);
         await documentList.map(async (document) => {
             results[document.Record.docType] = true;
