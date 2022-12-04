@@ -41,7 +41,7 @@ const travelRouter = require("./routes/travel/travel");
 // routers list
 app.use("/", indexRouter);
 app.use("/user", userRouter);
-app.use("/docs", docsRouter);
+app.use("/upload", docsRouter);
 app.use('/document', documentRouter);
 app.use("/travel", travelRouter);
 
