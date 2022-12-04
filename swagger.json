@@ -57,17 +57,17 @@
         }
       }
     },
-    "/user/signup" : {
+    "/user/signup": {
       "post": {
         "tags": ["User"],
         "summary": "SignUp new user",
         "parameters": [
           {
-            "in":"body",
+            "in": "body",
             "name": "body",
             "description": "Register",
-            "schema":{
-              "$ref":"#/definitions/new user"
+            "schema": {
+              "$ref": "#/definitions/new user"
             }
           }
         ],
@@ -81,24 +81,24 @@
         }
       }
     },
-    "/user/signin" : {
+    "/user/signin": {
       "post": {
         "tags": ["User"],
         "summary": "Login",
         "parameters": [
           {
-            "in":"body",
+            "in": "body",
             "name": "body",
             "description": "Register",
-            "schema":{
-              "$ref":"#/definitions/user login"
+            "schema": {
+              "$ref": "#/definitions/user login"
             }
           }
         ],
         "responses": {
           "201": {
-            "type":"jwt",
-            "token":"asdbaskdhbaskdjadkjasdnkasd"
+            "type": "jwt",
+            "token": "asdbaskdhbaskdjadkjasdnkasd"
           },
           "501": {
             "description": "does not exist email or invalid password"
@@ -106,17 +106,17 @@
         }
       }
     },
-    "/user/modify" : {
+    "/user/modify": {
       "post": {
         "tags": ["User"],
         "summary": "Modify user password",
         "parameters": [
           {
-            "in":"body",
+            "in": "body",
             "name": "body",
             "description": "update",
-            "schema":{
-              "$ref":"#/definitions/user modify"
+            "schema": {
+              "$ref": "#/definitions/user modify"
             }
           }
         ],
@@ -128,17 +128,17 @@
         }
       }
     },
-    "/user/delete" : {
+    "/user/delete": {
       "post": {
         "tags": ["User"],
         "summary": "delete user",
         "parameters": [
           {
-            "in":"body",
+            "in": "body",
             "name": "body",
             "description": "delete",
-            "schema":{
-              "$ref":"#/definitions/user delete"
+            "schema": {
+              "$ref": "#/definitions/user delete"
             }
           }
         ],
@@ -150,17 +150,17 @@
         }
       }
     },
-    "/document/" : {
+    "/document/": {
       "get": {
         "tags": ["Document"],
         "summary": "get specific document info",
         "parameters": [
           {
-            "in":"body",
+            "in": "body",
             "name": "body",
             "description": "get specific document info",
-            "schema":{
-              "$ref":"#/definitions/get specific doc req"
+            "schema": {
+              "$ref": "#/definitions/get specific doc req"
             }
           }
         ],
@@ -177,17 +177,17 @@
         }
       }
     },
-    "/document/all" : {
+    "/document/all": {
       "get": {
         "tags": ["Document"],
         "summary": "get documents",
         "parameters": [
           {
-            "in":"body",
+            "in": "body",
             "name": "body",
             "description": "get documents",
-            "schema":{
-              "$ref":"#/definitions/get all doc req"
+            "schema": {
+              "$ref": "#/definitions/get all doc req"
             }
           }
         ],
@@ -204,17 +204,17 @@
         }
       }
     },
-    "/document/create" : {
+    "/document/create": {
       "post": {
         "tags": ["Document"],
         "summary": "post document",
         "parameters": [
           {
-            "in":"body",
+            "in": "body",
             "name": "body",
             "description": "delete",
-            "schema":{
-              "$ref":"#/definitions/post document"
+            "schema": {
+              "$ref": "#/definitions/post document"
             }
           }
         ],
@@ -226,17 +226,17 @@
         }
       }
     },
-    "/document/delete" : {
+    "/document/delete": {
       "post": {
         "tags": ["Document"],
         "summary": "delete document",
         "parameters": [
           {
-            "in":"body",
+            "in": "body",
             "name": "body",
             "description": "delete document",
-            "schema":{
-              "$ref":"#/definitions/document delete"
+            "schema": {
+              "$ref": "#/definitions/document delete"
             }
           }
         ],
@@ -250,104 +250,105 @@
     }
   },
   "definitions": {
-    "get specific doc req":{
-      "properties":{
-          "email": {"type":"string"},
-          "password": {"type":"string"},
-          "docId": {"type":"string"}
-        }
-    },
-    "get all doc req":{
-      "properties":{
-          "email": {"type":"string"}
-        }
-    },
-    "get documents":{
-      "properties":{
-          "dataType": {"type":"string"},
-          "docExpiryDate": {"type":"string"},
-          "docName": {"type":"string"},
-          "docPublishedDate": {"type":"date"},
-          "docPublishedOrg": {"type":"string"},
-          "docSerialNum": {"type":"string"},
-          "docType": {"type":"string"},
-          "id": {"type":"string"},
-          "userId": {"type":"string"},
-          "visaType": {"type":"string"}
-        }
-    },
-    "get document":{
-      "properties":{
-          "dataType": {"type":"string"},
-          "docExpiryDate": {"type":"string"},
-          "docName": {"type":"string"},
-          "docPublishedDate": {"type":"date"},
-          "docPublishedOrg": {"type":"string"},
-          "docSerialNum": {"type":"string"},
-          "docType": {"type":"string"},
-          "id": {"type":"string"},
-          "userId": {"type":"string"},
-          "visaType": {"type":"string"}
-        }
-    },
-    "delete document":{
-      "properties":{
-        "docId":{"type":"string"},
-        "email":{"type":"string"},
-        "password":{"type":"string"}
+    "get specific doc req": {
+      "properties": {
+        "email": { "type": "string" },
+        "password": { "type": "string" },
+        "docId": { "type": "string" }
       }
     },
-    "post document":{
-      "properties":{
-        "email":{"type":"string"},
-        "password":{"type":"string"},
-        "docName":{"type":"string"},
-        "docSerialNum":{"type":"string"},
-        "docPublishedDate":{"type":"date"},
-        "docExpiryDate":{"type":"date"},
-        "docPublishOrg":{"type":"string"},
-        "docType":{"type":"VISA or PASSPORT or DRIVERLICENSE"},
-        "docDetailSerialNum":{"type":"string"}
+    "get all doc req": {
+      "properties": {
+        "email": { "type": "string" }
       }
     },
-    "get all document":{
-      "properties":{
-        "email":{"type":"string"}
+    "get documents": {
+      "properties": {
+        "dataType": { "type": "string" },
+        "docExpiryDate": { "type": "string" },
+        "docName": { "type": "string" },
+        "docPublishedDate": { "type": "date" },
+        "docPublishedOrg": { "type": "string" },
+        "docSerialNum": { "type": "string" },
+        "docType": { "type": "string" },
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "visaType": { "type": "string" }
       }
     },
-    "get specific document":{
-      "properties":{
-        "email":{"type":"string"}
+    "get document": {
+      "properties": {
+        "dataType": { "type": "string" },
+        "docExpiryDate": { "type": "string" },
+        "docName": { "type": "string" },
+        "docPublishedDate": { "type": "date" },
+        "docPublishedOrg": { "type": "string" },
+        "docSerialNum": { "type": "string" },
+        "docType": { "type": "string" },
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "visaType": { "type": "string" }
       }
     },
-    "user delete":{
-      "properties":{
-        "email":{"type":"string"},
-        "password":{"type":"string"}
+    "delete document": {
+      "properties": {
+        "docId": { "type": "string" },
+        "email": { "type": "string" },
+        "password": { "type": "string" }
       }
     },
-    "user modify":{
-      "properties":{
-        "email":{"type":"string"},
-        "password":{"type":"string"},
-        "newPassword":{"type":"string"}
+    "post document": {
+      "properties": {
+        "email": { "type": "string" },
+        "password": { "type": "string" },
+        "docName": { "type": "string" },
+        "docSerialNum": { "type": "string" },
+        "docPublishedDate": { "type": "date" },
+        "docExpiryDate": { "type": "date" },
+        "docPublishOrg": { "type": "string" },
+        "docType": { "type": "VISA or PASSPORT or DRIVERLICENSE" },
+        "docDetailSerialNum": { "type": "string" },
+        "fileId": { "type": "string" }
       }
     },
-    "user login":{
-      "properties":{
-        "email":{"type":"string"},
-        "password":{"type":"string"}
+    "get all document": {
+      "properties": {
+        "email": { "type": "string" }
+      }
+    },
+    "get specific document": {
+      "properties": {
+        "email": { "type": "string" }
+      }
+    },
+    "user delete": {
+      "properties": {
+        "email": { "type": "string" },
+        "password": { "type": "string" }
+      }
+    },
+    "user modify": {
+      "properties": {
+        "email": { "type": "string" },
+        "password": { "type": "string" },
+        "newPassword": { "type": "string" }
+      }
+    },
+    "user login": {
+      "properties": {
+        "email": { "type": "string" },
+        "password": { "type": "string" }
       }
     },
     "new user": {
-      "properties":{
-        "email": {"type":"string"},
-        "password": {"type": "string"},
-        "name": {"type":"string"},
-        "birthday": {"type":"date"},
-        "address": {"type":"string"},
-        "sex": {"type":"string"},
-        "nation": {"type":"string"}
+      "properties": {
+        "email": { "type": "string" },
+        "password": { "type": "string" },
+        "name": { "type": "string" },
+        "birthday": { "type": "date" },
+        "address": { "type": "string" },
+        "sex": { "type": "string" },
+        "nation": { "type": "string" }
       }
     },
     "user": {
