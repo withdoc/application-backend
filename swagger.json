@@ -106,8 +106,8 @@
         }
       }
     },
-    "/user/modify" : {
-      "post": {
+    "/user/" : {
+      "put": {
         "tags": ["User"],
         "summary": "Modify user password",
         "parameters": [
@@ -128,18 +128,15 @@
         }
       }
     },
-    "/user/delete" : {
-      "post": {
+    "/user" : {
+      "delete": {
         "tags": ["User"],
         "summary": "delete user",
         "parameters": [
           {
             "in":"body",
             "name": "body",
-            "description": "delete",
-            "schema":{
-              "$ref":"#/definitions/user delete"
-            }
+            "description": "delete"
           }
         ],
         "responses": {
@@ -150,7 +147,51 @@
         }
       }
     },
-    "/document/" : {
+    "/document/all" : {
+      "get": {
+        "tags": ["Document"],
+        "summary": "get documents",
+        "parameters": [
+          {
+            "in":"body",
+            "name": "body",
+            "description": "get documents"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#definitions/get documents"
+            }
+          },
+          "501": {
+            "description": "does not exist email or invalid password"
+          }
+        }
+      }
+    },
+    "/document" : {
+      "post": {
+        "tags": ["Document"],
+        "summary": "post document",
+        "parameters": [
+          {
+            "in":"body",
+            "name": "body",
+            "description": "create",
+            "schema":{
+              "$ref":"#/definitions/post document"
+            }
+          }
+        ],
+        "responses": {
+          "201": "ok",
+          "501": {
+            "description": "does not exist email or invalid password"
+          }
+        }
+      },
       "get": {
         "tags": ["Document"],
         "summary": "get specific document info",
@@ -177,67 +218,15 @@
         }
       }
     },
-    "/document/all" : {
-      "get": {
-        "tags": ["Document"],
-        "summary": "get documents",
-        "parameters": [
-          {
-            "in":"body",
-            "name": "body",
-            "description": "get documents",
-            "schema":{
-              "$ref":"#/definitions/get all doc req"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#definitions/get documents"
-            }
-          },
-          "501": {
-            "description": "does not exist email or invalid password"
-          }
-        }
-      }
-    },
-    "/document/create" : {
-      "post": {
-        "tags": ["Document"],
-        "summary": "post document",
-        "parameters": [
-          {
-            "in":"body",
-            "name": "body",
-            "description": "delete",
-            "schema":{
-              "$ref":"#/definitions/post document"
-            }
-          }
-        ],
-        "responses": {
-          "201": "ok",
-          "501": {
-            "description": "does not exist email or invalid password"
-          }
-        }
-      }
-    },
-    "/document/delete" : {
-      "post": {
+    "/document/" : {
+      "delete": {
         "tags": ["Document"],
         "summary": "delete document",
         "parameters": [
           {
             "in":"body",
             "name": "body",
-            "description": "delete document",
-            "schema":{
-              "$ref":"#/definitions/document delete"
-            }
+            "description": "delete document"
           }
         ],
         "responses": {
@@ -252,8 +241,6 @@
   "definitions": {
     "get specific doc req":{
       "properties":{
-          "email": {"type":"string"},
-          "password": {"type":"string"},
           "docId": {"type":"string"}
         }
     },
@@ -320,15 +307,8 @@
         "email":{"type":"string"}
       }
     },
-    "user delete":{
-      "properties":{
-        "email":{"type":"string"},
-        "password":{"type":"string"}
-      }
-    },
     "user modify":{
       "properties":{
-        "email":{"type":"string"},
         "password":{"type":"string"},
         "newPassword":{"type":"string"}
       }
