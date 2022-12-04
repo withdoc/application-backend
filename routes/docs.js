@@ -3,9 +3,10 @@ const Minio = require("minio");
 const { PDFNet } = require("@pdftron/pdfnet-node");
 const Jimp = require("jimp");
 const fs = require("fs");
+const RandomHash = require("random-hash");
 
 const minioClient = new Minio.Client({
-  endPoint: "localhost",
+  endPoint: "15.164.231.10",
   port: 9000,
   useSSL: false,
 
@@ -18,6 +19,8 @@ const router = express.Router();
 router.post("/", async function (req, res, next) {
   let uploadFile = req.files.file;
 
+  const hash = RandomHash.generateHash({ length: 10 });
+
   async function main() {
     try {
       const doc = await PDFNet.PDFDoc.createFromUFilePath(
@@ -27,15 +30,15 @@ router.post("/", async function (req, res, next) {
 
       const pdfDraw = await PDFNet.PDFDraw.create(92);
       const currPage = await doc.getPage(1);
-      await pdfDraw.export(currPage, "/tmp/assets/test.png", "PNG");
+      await pdfDraw.export(currPage, `/tmp/assets/${hash}.png`, "PNG");
 
-      const image = await Jimp.read("/tmp/assets/test.png");
+      const image = await Jimp.read(`/tmp/assets/${hash}.png`);
 
       await image
         .blur(7, function (err) {
           if (err) throw err;
         })
-        .writeAsync("/tmp/assets/blur.jpg");
+        .writeAsync(`/tmp/assets/${hash}-blur.png`);
     } catch (e) {
       console.log(e);
     }
@@ -61,17 +64,6 @@ router.post("/", async function (req, res, next) {
     var metaData = {
       "Content-Type": "application/pdf",
     };
-    // Using fPutObject API upload your file to the bucket europetrip.
-    minioClient.fPutObject(
-      "pdf",
-      "test123.pdf",
-      file,
-      metaData,
-      function (err, etag) {
-        if (err) return console.log(err);
-        console.log("File uploaded successfully.");
-      }
-    );
   });
   var metaData = {
     "Content-Type": "application/pdf",
@@ -79,7 +71,7 @@ router.post("/", async function (req, res, next) {
   // Using fPutObject API upload your file to the bucket europetrip.
   minioClient.fPutObject(
     "pdf",
-    uploadFile.name,
+    `${hash}.pdf`,
     uploadFile.tempFilePath,
     metaData,
     function (err, etag) {
@@ -88,10 +80,10 @@ router.post("/", async function (req, res, next) {
     }
   );
 
-  const file = fs.readFileSync("/tmp/assets/blur.jpg");
+  const file = await fs.readFileSync(`/tmp/assets/${hash}-blur.png`);
 
   const submitFileDataResult = await minioClient
-    .putObject("thumbnail", `${uploadFile.name}-thumbnail.jpg`, file)
+    .putObject("thumbnail", `${hash}.jpg`, file)
     .catch((e) => {
       console.log("Error while creating object from file data: ", e);
       throw e;
@@ -99,20 +91,9 @@ router.post("/", async function (req, res, next) {
 
   console.log(submitFileDataResult);
 
-  // minioClient.putObject(
-  //   "thumbnail",
-  //   `${uploadFile.name}-thumbnail.jpg`,
-  //   "/tmp/assets/blur.jpg",
-  //   {
-  //     "Content-Type": "image/jpeg",
-  //   },
-  //   function (err, etag) {
-  //     if (err) return console.log(err);
-  //     console.log("File uploaded successfully.");
-  //   }
-  // );
-
-  res.sendStatus(200);
+  res.json({
+    hash,
+  });
 });
 
 module.exports = router;
