@@ -44,6 +44,7 @@ router.post('/signin', async function(req, res, next){
   }
 })
 
+
 router.put('/', authJwt, async function(req, res, next){
   const { password, newPassword} = req.body;
   const passwordHashedValue = sha256(password);
