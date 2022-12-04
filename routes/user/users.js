@@ -45,19 +45,16 @@ router.post('/signin', async function(req, res, next){
 })
 
 router.put('/modify', authJwt, async function(req, res, next){
-  const { email, password, newPassword} = req.body;
+  const { password, newPassword} = req.body;
   const passwordHashedValue = sha256(password);
   const newPasswordHashedValue = sha256(newPassword);
-  await fabric.contract.submitTransaction("ModifyPassword", email, passwordHashedValue, newPasswordHashedValue)
+  await fabric.contract.submitTransaction("ModifyPassword", req.id, passwordHashedValue, newPasswordHashedValue)
     .then(()=>{res.send(200)})
     .catch(err => {res.send(401)})
 })
 
 router.post('/delete', authJwt, async (req,res,next) => {
-  const { email, password } = req.body;
-  const emailHashedValue = email;
-  const passwordHashedValue = sha256(password)
-  await fabric.contract.submitTransaction("DeleteUser", emailHashedValue, passwordHashedValue)
+  await fabric.contract.submitTransaction("DeleteUser", req.id)
     .then(()=>{res.send(200)})
     .catch(err => {res.send(401)})
 })

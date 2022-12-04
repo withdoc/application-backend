@@ -1,7 +1,7 @@
 const express = require("express");
 const sha256 = require("sha256");
 const FabricConfig = require("../../bin/FabricConfig");
-const RandomeHash = require("random-hash");
+const RandomHash = require("random-hash");
 const authJwt = require("../../midlewares/authJwt");
 const Minio = require("minio");
 
@@ -27,8 +27,6 @@ const minioClient = new Minio.Client({
 
 router.post("/", authJwt, async (req, res, next) => {
   const {
-    email,
-    password,
     docName,
     docSerialNum,
     docPublishedDate,
@@ -36,12 +34,11 @@ router.post("/", authJwt, async (req, res, next) => {
     docPublishOrg,
     docType,
     docDetailSerialNum,
-
     fileId,
   } = req.body;
 
-  const documentId = RandomeHash.generateHash();
-  const docDetailId = RandomeHash.generateHash();
+  const documentId = RandomHash.generateHash();
+  const docDetailId = RandomHash.generateHash();
 
   console.log(documentId);
 
@@ -50,8 +47,7 @@ router.post("/", authJwt, async (req, res, next) => {
       "CreateDocument",
       documentId,
       docDetailId,
-      email,
-      sha256(password),
+      req.id,
       docName,
       docSerialNum,
       docPublishedDate,
@@ -61,7 +57,10 @@ router.post("/", authJwt, async (req, res, next) => {
       "document",
       docDetailSerialNum
     )
-    .then((documentInfo) => {})
+    .then((documentInfo) => {
+      console.log(documentInfo);
+      res.send("ok");
+    })
     .catch((err) => {
       res.send(err);
     });
@@ -100,10 +99,9 @@ router.post("/", authJwt, async (req, res, next) => {
 
 router.get("/all", authJwt, async (req, res, next) => {
   // 추가인증 ?
-  const email = req.query.email;
   let results = [];
   await fabric.contract
-    .evaluateTransaction("GetAllDocuments", email)
+    .evaluateTransaction("GetAllDocuments", req.id)
     .then(async (documents) => {
       const documentList = JSON.parse(documents);
       await documentList.map(async (document) => {
@@ -135,12 +133,9 @@ router.get("/", authJwt, async (req, res, next) => {
   res.send(document);
 });
 
-router.post("/delete", authJwt, async (req, res, next) => {
-  const { docId, email, password } = req.body;
-
-  const passwordHashedValue = sha256(password);
+router.delete("/", authJwt, async (req, res, next) => {
   await fabric.contract
-    .submitTransaction("DeleteDocument", email, passwordHashedValue, docId)
+    .submitTransaction("DeleteDocument", req.id, req.query.docId)
     .then(() => {
       res.send(200);
     })
